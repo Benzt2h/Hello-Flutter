@@ -1,0 +1,32 @@
+import 'package:flutter/material.dart';
+import 'package:flutteronline/pages/HomeStack.dart';
+import 'package:flutteronline/pages/ProductStack.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        //primarySwatch: Colors.blue,
+        primaryColor: Colors.purple,
+        accentColor: Colors.purpleAccent,
+        canvasColor: Colors.purple[50],
+        textTheme:
+            TextTheme(headline1: TextStyle(color: Colors.green, fontSize: 50)),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      //home: HomePage(),
+      initialRoute: '/',
+      routes: <String, WidgetBuilder>{
+        '/': (context) => HomeStack(),
+        '/productstack': (context) => ProductStack(),
+      },
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
