@@ -3,6 +3,7 @@ import 'package:flutteronline/pages/AboutPage.dart';
 import 'package:flutteronline/pages/CompanyPage.dart';
 import 'package:flutteronline/pages/ContactPage.dart';
 import 'package:flutteronline/pages/HomePage.dart';
+import 'package:flutteronline/pages/RoomPage.dart';
 
 class HomeStack extends StatefulWidget {
   HomeStack({Key key}) : super(key: key);
@@ -30,6 +31,9 @@ class _HomeStackState extends State<HomeStack> {
             break;
           case 'homestack/company':
             builder = (BuildContext _) => CompanyPage();
+            break;
+          case 'homestack/room':
+            builder = (BuildContext _) => RoomPage();
             break;
           default:
             throw Exception('Invalid route: ${settings.name}');

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:flutteronline/models/product.dart';
+import 'package:flutteronline/models/product.dart';
 import 'package:flutteronline/widgets/menu.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
@@ -12,22 +12,19 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  List<dynamic> course = [];
+  List<Course> course = [];
   bool isLoading = true;
 
   _getData() async {
     var url = 'https://api.codingthailand.com/api/course';
     var res = await http.get(url);
     if (res.statusCode == 200) {
-      final Map<String, dynamic> product = convert.jsonDecode(res.body);
+      final Product product = Product.fromJson(convert.jsonDecode(res.body));
       setState(() {
-        course = product['data'];
+        course = product.course;
         isLoading = false;
       });
     } else {
-      setState(() {
-        isLoading = false;
-      });
       print('error from backend ${res.statusCode}');
     }
   }
@@ -58,12 +55,12 @@ class _ProductPageState extends State<ProductPage> {
                   onTap: () {
                     Navigator.of(context).pushNamed('productstack/detail',
                         arguments: {
-                          'id': course[index]['id'],
-                          'title': course[index]['title']
+                          'id': course[index].id,
+                          'title': course[index].title
                         });
                   },
-                  title: Text(course[index]['title']),
-                  subtitle: Text(course[index]['detail']),
+                  title: Text(course[index].title),
+                  subtitle: Text(course[index].detail),
                   trailing: Icon(Icons.arrow_right),
                   leading: Container(
                     width: 80,
@@ -71,7 +68,7 @@ class _ProductPageState extends State<ProductPage> {
                     decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
                         image: DecorationImage(
-                          image: NetworkImage(course[index]['picture']),
+                          image: NetworkImage(course[index].picture),
                           fit: BoxFit.cover,
                         )),
                   ),

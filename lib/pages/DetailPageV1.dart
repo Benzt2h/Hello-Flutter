@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:flutteronline/models/detail.dart';
+import 'package:flutteronline/models/detail.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -13,7 +13,7 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   Map<String, dynamic> course;
-  List<dynamic> chapter = [];
+  List<Chapter> chapter = [];
   bool isLoading = true;
   final fNumber = NumberFormat('#,###');
 
@@ -21,9 +21,9 @@ class _DetailPageState extends State<DetailPage> {
     var url = 'https://api.codingthailand.com/api/course/$id';
     var res = await http.get(url);
     if (res.statusCode == 200) {
-      final Map<String, dynamic> detail = convert.jsonDecode(res.body);
+      final Detail detail = Detail.fromJson(convert.jsonDecode(res.body));
       setState(() {
-        chapter = detail['data'];
+        chapter = detail.chapter;
         isLoading = false;
       });
     } else {
@@ -55,10 +55,10 @@ class _DetailPageState extends State<DetailPage> {
               itemCount: chapter.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
-                  title: Text(chapter[index]['ch_title']),
-                  subtitle: Text(chapter[index]['ch_dateadd']),
+                  title: Text(chapter[index].chTitle),
+                  subtitle: Text(chapter[index].chDateadd),
                   trailing: Chip(
-                    label: Text('${fNumber.format(chapter[index]['ch_view'])}'),
+                    label: Text('${fNumber.format(chapter[index].chView)}'),
                     backgroundColor: Colors.purpleAccent,
                   ),
                 );

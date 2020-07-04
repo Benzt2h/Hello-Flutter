@@ -120,6 +120,30 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.white70,
               ),
             ),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, 'homestack/room');
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.person,
+                      size: 80,
+                      color: Colors.purple,
+                    ),
+                    Text(
+                      "ห้องพัก",
+                      style: TextStyle(fontSize: 20),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+                color: Colors.white70,
+              ),
+            ),
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.

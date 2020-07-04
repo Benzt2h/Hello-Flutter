@@ -12,14 +12,12 @@ class AboutPage extends StatefulWidget {
 class _AboutPageState extends State<AboutPage> {
   Future<Map<String, dynamic>> _getData() async {
     var url = 'https://api.codingthailand.com/api/version';
-    var response = await http.get(url);
-    if (response.statusCode == 200) {
-      // print(response.body);
-      final Map<String, dynamic> version = convert.jsonDecode(response.body);
+    var res = await http.get(url);
+    if (res.statusCode == 200) {
+      final Map<String, dynamic> version = convert.jsonDecode(res.body);
       return version;
     } else {
-      //error 400, 500
-      throw Exception('Failed to load version ${response.statusCode}');
+      throw Exception("Failed to load version ${res.statusCode}");
     }
   }
 
@@ -48,10 +46,9 @@ class _AboutPageState extends State<AboutPage> {
                   if (snapshot.hasData) {
                     return Text(snapshot.data['data']['version']);
                   } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
+                    return Text('${snapshot.error}');
                   }
 
-                  // By default, show a loading spinner.
                   return CircularProgressIndicator();
                 },
               ),
