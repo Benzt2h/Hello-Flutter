@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutteronline/pages/HomeStack.dart';
+//import 'package:flutteronline/pages/HomeStack.dart';
+import 'package:flutteronline/pages/LoginPage.dart';
 import 'package:flutteronline/pages/NewsStack.dart';
 import 'package:flutteronline/pages/ProductStack.dart';
+import 'package:flutteronline/pages/RegisterPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,7 +26,8 @@ class MyApp extends StatelessWidget {
       //home: HomePage(),
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
-        '/': (context) => HomeStack(),
+        '/': (context) => LoginPage(),
+        '/register': (context) => RegisterPage(),
         '/productstack': (context) => ProductStack(),
         '/newsstack': (context) => NewsStack(),
       },
