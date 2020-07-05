@@ -15,8 +15,12 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   bool _autovalidate = false;
+  bool isLoading = false;
 
   _register(Map<String, dynamic> values) async {
+    setState(() {
+      isLoading = true;
+    });
     var url = 'https://api.codingthailand.com/api/register';
     var res = await http.post(url,
         headers: {'Content-Type': 'applicaion/json'},
@@ -27,6 +31,9 @@ class _RegisterPageState extends State<RegisterPage> {
           'dob': values['dob'].toString().substring(0, 10)
         }));
     if (res.statusCode == 201) {
+      setState(() {
+        isLoading = false;
+      });
       var feedback = convert.jsonDecode(res.body);
       Flushbar(
         title: "${feedback['message']}",
@@ -39,9 +46,14 @@ class _RegisterPageState extends State<RegisterPage> {
         duration: Duration(seconds: 3),
         leftBarIndicatorColor: Colors.blue[300],
       )..show(context);
-      Future.delayed(Duration(seconds: 3));
-      Navigator.pop(context);
+      print("201");
+      Future.delayed(Duration(seconds: 3), () {
+        Navigator.pop(context);
+      });
     } else {
+      setState(() {
+        isLoading = false;
+      });
       var feedback = convert.jsonDecode(res.body);
       Flushbar(
         title: "${feedback['message']}",
@@ -190,10 +202,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                   });
                                 }
                               },
-                              child: Text(
-                                "Register",
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.white),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  isLoading == true
+                                      ? CircularProgressIndicator()
+                                      : Text(''),
+                                  Text(
+                                    "Register",
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white),
+                                  )
+                                ],
                               ),
                               padding: EdgeInsets.all(30),
                               color: Colors.deepPurple,
