@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutteronline/widgets/logo.dart';
 import 'package:flutteronline/widgets/menu.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -11,6 +12,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var fromAbout;
+
+  _logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+    await prefs.remove('profile');
+    Navigator.of(context, rootNavigator: true)
+        .pushNamedAndRemoveUntil('/login', (route) => false);
+    //TODO:post api logout
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,6 +29,13 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Logo(),
         centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.exit_to_app),
+              onPressed: () {
+                _logout();
+              })
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(

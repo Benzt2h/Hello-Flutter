@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert' as convert;
 
 class Menu extends StatefulWidget {
   Menu({Key key}) : super(key: key);
@@ -8,6 +10,24 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
+  Map<String, dynamic> profile = {'name': '', 'email': '', 'role': ''};
+
+  _getProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var profileString = prefs.getString('profile');
+    if (profileString != null) {
+      setState(() {
+        profile = convert.jsonDecode(profileString);
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getProfile();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,7 +36,7 @@ class _MenuState extends State<Menu> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
+            /*DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.deepPurple,
               ),
@@ -27,6 +47,22 @@ class _MenuState extends State<Menu> {
                   fontSize: 24,
                 ),
               ),
+            )*/
+            UserAccountsDrawerHeader(
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: AssetImage('assets/images/me.png'),
+              ),
+              accountName: Text('${profile['name']}'),
+              accountEmail: Text('${profile['email']} Role:${profile['role']}'),
+              otherAccountsPictures: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'homestack/editprofile',
+                        arguments: {'name': profile['name']});
+                  },
+                )
+              ],
             ),
             ListTile(
               leading: Icon(Icons.home),
@@ -37,7 +73,7 @@ class _MenuState extends State<Menu> {
               trailing: Icon(Icons.arrow_right),
               onTap: () {
                 Navigator.of(context, rootNavigator: true)
-                    .pushNamedAndRemoveUntil('/', (route) => false);
+                    .pushNamedAndRemoveUntil('/homestack', (route) => false);
               },
             ),
             ListTile(

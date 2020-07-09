@@ -205,14 +205,14 @@ class _RegisterPageState extends State<RegisterPage> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  isLoading == true
-                                      ? CircularProgressIndicator()
-                                      : Text(''),
                                   Text(
                                     "Register",
                                     style: TextStyle(
                                         fontSize: 20, color: Colors.white),
-                                  )
+                                  ),
+                                  isLoading == true
+                                      ? CircularProgressIndicator()
+                                      : Text(''),
                                 ],
                               ),
                               padding: EdgeInsets.all(30),

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flushbar/flushbar.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -11,6 +15,70 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   bool _autovalidate = false;
+  SharedPreferences prefs;
+  bool isLoading = false;
+
+  _initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initPrefs();
+  }
+
+  _login(Map<String, dynamic> values) async {
+    setState(() {
+      isLoading = true;
+    });
+    var url = 'https://api.codingthailand.com/api/login';
+    var res = await http.post(url,
+        headers: {'Content-Type': 'applicaion/json'},
+        body: convert.jsonEncode({
+          'email': values['email'],
+          'password': values['password'],
+        }));
+    if (res.statusCode == 200) {
+      setState(() {
+        isLoading = false;
+      });
+
+      await prefs.setString('token', res.body);
+      await _getProfile();
+
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/homestack', (Route<dynamic> route) => false);
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      var feedback = convert.jsonDecode(res.body);
+      Flushbar(
+        title: "${feedback['message']}",
+        message: "${feedback['message']}",
+        icon: Icon(
+          Icons.error_outline,
+          size: 28.0,
+          color: Colors.red[300],
+        ),
+        duration: Duration(seconds: 3),
+        leftBarIndicatorColor: Colors.red[300],
+      )..show(context);
+    }
+  }
+
+  Future<void> _getProfile() async {
+    String url = 'https://api.codingthailand.com/api/profile';
+    var tokenString = prefs.getString('token');
+    var token = convert.jsonDecode(tokenString);
+    var res = await http.get(url,
+        headers: {'Authorization': 'Bearer ${token['access_token']}'});
+    var profile = convert.jsonDecode(res.body);
+    await prefs.setString(
+        'profile', convert.jsonEncode(profile['data']['user']));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                             child: RaisedButton(
                               onPressed: () {
                                 if (_fbKey.currentState.saveAndValidate()) {
-                                  print(_fbKey.currentState.value);
+                                  _login(_fbKey.currentState.value);
                                 } else {
                                   setState(() {
                                     _autovalidate = true;
