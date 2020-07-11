@@ -36,6 +36,7 @@ dependencies:
   flutter_form_builder: ^3.11.3
   flushbar: ^1.10.4
   shared_preferences: ^0.5.8
+  flutter_redux: ^0.6.0
 
 dev_dependencies:
   flutter_test:
