@@ -46,6 +46,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: <Widget>[
             StoreConnector<AppState, Map<String, dynamic>>(
+              distinct: true,
               converter: (store) => store.state.profileState.profile,
               builder: (context, profile) {
                 return Expanded(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutteronline/redux/appReducer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 
@@ -10,15 +12,15 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
-  Map<String, dynamic> profile = {'name': '', 'email': '', 'role': ''};
+  //Map<String, dynamic> profile = {'name': '', 'email': '', 'role': ''};
 
   _getProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var profileString = prefs.getString('profile');
     if (profileString != null) {
-      setState(() {
+      /*setState(() {
         profile = convert.jsonDecode(profileString);
-      });
+      });*/
     }
   }
 
@@ -48,21 +50,28 @@ class _MenuState extends State<Menu> {
                 ),
               ),
             )*/
-            UserAccountsDrawerHeader(
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/me.png'),
-              ),
-              accountName: Text('${profile['name']}'),
-              accountEmail: Text('${profile['email']} Role:${profile['role']}'),
-              otherAccountsPictures: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'homestack/editprofile',
-                        arguments: {'name': profile['name']});
-                  },
-                )
-              ],
+            StoreConnector<AppState, Map<String, dynamic>>(
+              distinct: true,
+              converter: (store) => store.state.profileState.profile,
+              builder: (context, profile) {
+                return UserAccountsDrawerHeader(
+                  currentAccountPicture: CircleAvatar(
+                    backgroundImage: AssetImage('assets/images/me.png'),
+                  ),
+                  accountName: Text('${profile['name']}'),
+                  accountEmail:
+                      Text('${profile['email']} Role:${profile['role']}'),
+                  otherAccountsPictures: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.pushNamed(context, 'homestack/editprofile',
+                            arguments: {'name': profile['name']});
+                      },
+                    )
+                  ],
+                );
+              },
             ),
             ListTile(
               leading: Icon(Icons.home),
