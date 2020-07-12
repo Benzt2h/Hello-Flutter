@@ -37,6 +37,7 @@ dependencies:
   flushbar: ^1.10.4
   shared_preferences: ^0.5.8
   flutter_redux: ^0.6.0
+  equatable: ^1.2.2
 
 dev_dependencies:
   flutter_test:

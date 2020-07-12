@@ -1,8 +1,9 @@
 import 'package:flutteronline/redux/profile/profileAction.dart';
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-class ProfileState {
+class ProfileState extends Equatable {
   final Map<String, dynamic> profile;
 
   ProfileState(
@@ -16,6 +17,9 @@ class ProfileState {
   ProfileState copyWith({final Map<String, dynamic> profile}) {
     return ProfileState(profile: profile ?? this.profile);
   }
+
+  @override
+  List<Object> get props => [profile];
 }
 
 profileReducer(ProfileState state, dynamic action) {
