@@ -14,7 +14,7 @@ class ProfileState extends Equatable {
       }*/
       this.profile});
 
-  ProfileState copyWith({final Map<String, dynamic> profile}) {
+  ProfileState copyWith({Map<String, dynamic> profile}) {
     return ProfileState(profile: profile ?? this.profile);
   }
 

@@ -6,6 +6,7 @@ import 'package:flutteronline/pages/NewsStack.dart';
 import 'package:flutteronline/pages/ProductStack.dart';
 import 'package:flutteronline/pages/RegisterPage.dart';
 import 'package:flutteronline/redux/appReducer.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:redux/redux.dart';
 
@@ -15,7 +16,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   token = prefs.getString('token');
-  final store = Store<AppState>(appReducer, initialState: AppState.initial());
+  final store = Store<AppState>(
+    appReducer,
+    initialState: AppState.initial(),
+    middleware: [thunkMiddleware],
+  );
   runApp(MyApp(store: store));
 }
 
