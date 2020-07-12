@@ -12,7 +12,7 @@ class ProfileState extends Equatable {
         "name": "benz",
         "role": "test"
       }*/
-      this.profile});
+      this.profile = const {'email': "", "name": "", "role": ""}});
 
   ProfileState copyWith({Map<String, dynamic> profile}) {
     return ProfileState(profile: profile ?? this.profile);
